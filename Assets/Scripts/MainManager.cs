@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
 {
+    
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
@@ -13,10 +14,12 @@ public class MainManager : MonoBehaviour
     public Text ScoreText;
     public GameObject GameOverText;
     
+    
     private bool m_Started = false;
-    private int m_Points;
+    private static int m_Points;
     
     private bool m_GameOver = false;
+
 
     
     // Start is called before the first frame update
@@ -44,6 +47,8 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                m_Points = 0;
+                GameOverText.SetActive(false);
                 m_Started = true;
                 float randomDirection = Random.Range(-1.0f, 1.0f);
                 Vector3 forceDir = new Vector3(randomDirection, 1, 0);
@@ -55,9 +60,9 @@ public class MainManager : MonoBehaviour
         }
         else if (m_GameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                SaveScore();
+                SceneManager.LoadScene(2);
             }
         }
     }
@@ -71,6 +76,15 @@ public class MainManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver = true;
-        GameOverText.SetActive(true);
+        
+    }
+
+    public void SaveScore()
+    {
+        PlayerPrefs.SetInt("m_Points", m_Points);
+    }
+    public void LoadScore()
+    {
+        PlayerPrefs.GetInt("m_Points");
     }
 }
